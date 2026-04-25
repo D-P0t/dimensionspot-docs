@@ -1,6 +1,6 @@
-# DimensionsPot | BodySize Engine — Documentation
+### **DimensionsPot | BodySize Engine**
+# **Documentation**
 
-`v1.4.0` | Python 3.11 | FastAPI | ISO 7250-1:2017 Compliant
 
 REST API that generates a comprehensive anthropometric profile of up to **130 body dimensions** from minimal user input — gender + a single anchor measurement. ISO 7250-1:2017 compliant. No photos, no PII, fully stateless. Sub-10ms inference.
 
