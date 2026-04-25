@@ -1,9 +1,8 @@
-### DimensionsPot | BodySize Engine
-# **Documentation**
+# DimensionsPot | BodySize Engine — Documentation
 
-<br>
+`v1.4.0` | Python 3.11 | FastAPI | ISO 7250-1:2017 Compliant
 
-REST API that generates a comprehensive anthropometric profile of up to **130 body dimensions from minimal user input** — gender + a single anchor measurement. ISO 7250-1:2017 compliant. No photos, no PII, fully stateless. Sub-10ms inference.
+REST API that generates a comprehensive anthropometric profile of up to **130 body dimensions** from minimal user input — gender + a single anchor measurement. ISO 7250-1:2017 compliant. No photos, no PII, fully stateless. Sub-10ms inference.
 
 → **Full API description & live access:** [DimensionsPot on RapidAPI](https://rapidapi.com/) *(replace with your listing URL)*
 
@@ -25,14 +24,14 @@ Step-by-step technical implementation guides — endpoints, payloads, code examp
 
 | # | Vertical | Cookbook |
 |---|---|---|
-| 01 | Fashion & Apparel E-commerce | [→ Read](cookbooks/01_fashion_apparel_ecommerce.md) |
-| 02 | Sports Equipment & Rental | [→ Read](cookbooks/02_sports_equipment_rental.md) |
-| 03 | Online Eyewear & VR/AR | [→ Read](cookbooks/03_eyewear_vr_ar.md) |
-| 04 | Gaming, VFX & Metaverse | [→ Read](cookbooks/04_gaming_vfx_metaverse.md) |
-| 05 | Wearables | [→ Read](cookbooks/05_wearables.md) |
-| 06 | Childrenswear & Children's Products | [→ Read](cookbooks/06_childrenswear_and_products.md) |
-| 07 | Workwear at Scale | [→ Read](cookbooks/07_workwear_at_scale.md) |
-| 08 | Multi-Region Platform | [→ Read](cookbooks/08_multi_region_platform.md) |
+| 01 | Fashion & Apparel E-commerce | [→ Read](integration-cookbooks/01_fashion_apparel_ecommerce.md) |
+| 02 | Sports Equipment & Rental | [→ Read](integration-cookbooks/02_sports_equipment_rental.md) |
+| 03 | Online Eyewear & VR/AR | [→ Read](integration-cookbooks/03_eyewear_vr_ar.md) |
+| 04 | Gaming, VFX & Metaverse | [→ Read](integration-cookbooks/04_gaming_vfx_metaverse.md) |
+| 05 | Wearables | [→ Read](integration-cookbooks/05_wearables.md) |
+| 06 | Childrenswear & Children's Products | [→ Read](integration-cookbooks/06_childrenswear_and_products.md) |
+| 07 | Workwear at Scale | [→ Read](integration-cookbooks/07_workwear_at_scale.md) |
+| 08 | Multi-Region Platform | [→ Read](integration-cookbooks/08_multi_region_platform.md) |
 
 <br>
 
