@@ -9,17 +9,23 @@ Your Saturday morning queue isn't a staffing problem you can hire your way out o
 
 The second cost is less visible but bigger: procurement. You're ordering next season's size mix based on last season's guesswork, and the emergency mid-season re-order when the Mediums run out is eating your margin before the lifts even open.
 
+<br>
+
 ### **Where the money is**
 
 * **Throughput:** Industry time-motion benchmarks for ski boot fitting show 7–9 minutes manual trial-and-error vs. 3–4 minutes when gear is pre-sized and waiting at the counter¹. In a peak window, that's an effective doubling of counter capacity without adding staff.
 * **Inventory:** Pre-season aggregation replaces the "order a mixed pallet and pray" model with a sized purchase order. The emergency re-order cycle is the line item most operators discover they can cut first.
 * **Staff:** Handing over pre-stickered equipment cuts the time each fitting session takes, which means your existing staff moves through more customers per hour. Across a peak season, that's measurably fewer seasonal hires needed to keep the queue moving.
 
+<br>
+
 ### **What we actually do**
 
 At online booking, you already ask for height and weight (or you can — it's one extra field). We take those two numbers and return a 130-point anthropometric profile in under 10ms: foot length, head circumference, calf circumference, inseam, chest, everything you need to pre-stage equipment before the customer arrives.
 
 Aggregate the booking export and you have a real size distribution for your actual customer base per equipment category — not a catalog standard. That alone tends to justify the integration before you touch the counter workflow.
+
+<br>
 
 ### **Where we're upfront**
 
