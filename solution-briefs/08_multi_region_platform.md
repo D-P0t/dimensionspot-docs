@@ -9,17 +9,23 @@ Cross-border expansion looks good on the finance model and terrible on the retur
 
 The result is a return rate in new markets that your initial business case didn't budget for, a slow trust erosion that shows up first in reviews and then in conversion, and an expansion that lands at a margin well below projection.
 
+<br>
+
 ### **Where the money is**
 
 * **Cross-border returns:** International returns cost materially more to process than domestic ones¹. A regionally-calibrated size recommendation compresses the single largest margin leak in new-market expansion.
 * **Sourcing validation:** Query the same demographic with different regional settings and get the dimension-by-dimension delta. This is the procurement safeguard you want before signing a bulk contract with a supplier in a different region than your end market — not after.
 * **Market entry speed:** You scale into new regions on the same integration, with population-calibrated fit from day one. No local sizing studies required before launch.
 
+<br>
+
 ### **What we actually do**
 
 One parameter pair: `input_origin_region` (your customer's population) and `target_region` (the population your size chart was built for). The API handles the translation before inference runs, so the output dimensions are calibrated to the right population — not scaled with a naive offset.
 
 "Double penalty" is the thing that separates us from simpler conversion libraries. Naive regional scaling takes a smaller anchor measurement (say, Asian height) and applies it to a globally-trained model that interprets "shorter" as "smaller overall" — compounding the error across every dependent dimension. We normalize the input to the global ANSUR baseline first (Universal Translator Step A), then calibrate the output to the target region (Step B). Two independent steps, one request.
+
+<br>
 
 ### **Where we're upfront**
 
