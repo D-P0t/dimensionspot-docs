@@ -277,7 +277,8 @@ print(f"Suggested US ring size: {us_size}  |  ISO: {iso_circ} mm")
 - For ankle tracking devices, add `"ankle_circumference"` to `specific_dimensions` rather than switching to `FULL_BODY` — the HAND_ARM bundle covers hand and wrist, and a targeted `specific_dimensions` call avoids the larger FULL_BODY payload.
 
 <br>
-<br> 
+<br>
+<br>
 
 > ### **Disclaimer And Limitation Of Liability**
 >
