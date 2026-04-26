@@ -173,7 +173,7 @@ def recommend_bike_frame(api_response):
 - Store the full API response in your booking record. If a customer reports poor fit on arrival, the stored body profile enables post-hoc analysis of systematic sizing errors across your inventory.
 - Flag any dimension with `biological_limit_status: "OUT_OF_BOUNDS"` — these should be handled manually at check-in. Do not use out-of-bounds values for automated pre-sizing.
 - P99 latency is 6–8 ms per call. Pre-sizing an entire day's bookings overnight in a nightly batch job is trivially fast even for a large resort.
-- For children's rental, switch `age_category` to the appropriate pediatric value and omit `anchors` — the pediatric engine requires no measurements. See [COOKBOOK_06: Childrenswear & Children's Products](COOKBOOK_06_Childrenswear_And_Childrens_Products_v2_REV.md).
+- For children's rental, switch `age_category` to the appropriate pediatric value and omit `anchors` — the pediatric engine requires no measurements. See [COOKBOOK_06: Childrenswear & Children's Products](https://github.com/D-P0t/dimensionspot-docs/blob/main/integration-cookbooks/06_childrenswear_and_products.md).
 - For **international resorts** (guests from multiple origins), always set `input_origin_region` per customer — body proportion norms differ significantly across regions, particularly for foot dimensions and head circumference.
 
 <br>
