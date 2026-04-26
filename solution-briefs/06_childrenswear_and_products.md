@@ -9,6 +9,8 @@ Age-bracket labels are a legacy convention that the industry has quietly agreed 
 
 The second problem is structural for you specifically: when you source across regions, the dimensional envelope behind the same age label varies significantly between an Asian supplier and a European manufacturer. You're discovering this after the container lands, not before the contract is signed.
 
+<br>
+
 ### **Where the money is**
 
 * **Return clarity:** Translate "Ages 2–4" into the actual chest, height, and inseam range your product covers. A parent with a measured child can compare directly — that's the single biggest removable cause of childrenswear returns.
@@ -16,11 +18,15 @@ The second problem is structural for you specifically: when you source across re
 * **"Fits until" intelligence:** Use CDC median growth curves to project when a typical child outgrows your product. "Fits most children until approximately age 3.5" on a listing builds trust in a category where every competitor is hiding behind vague brackets.
 * **Design inputs for children's products and toys:** For apparel designers, age-bracket boundaries become exact dimensional envelopes (chest range, inseam range, shoulder breadth). For toy and children's product designers, the same data informs grip width, reach distance, and proportional scaling — turning "for ages 3–5" from a marketing label into a specification.
 
+<br>
+
 ### **What we actually do**
 
 We convert age and gender into a 130-point anthropometric profile grounded in CDC clinical growth data — the same LMS tables used in pediatric growth charts. No measurements of the child required. In under 10ms.
 
 The API returns both the population median and a 95% prediction interval (`range_95`) for every dimension, so you see not just the typical child but the range of children your product will encounter.
+
+<br>
 
 ### **Where we're upfront**
 
