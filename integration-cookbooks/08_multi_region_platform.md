@@ -264,11 +264,9 @@ def get_prediction(customer_locale, merchant_config, gender, height_mm, mass_kg,
 - Check `header.meta_warnings` for regional fallback notices (e.g., India female fallback to ASIA_PACIFIC). These are non-fatal but indicate reduced regional accuracy for that specific request.
 - When `input_origin_region == target_region`, both normalisation steps still apply — Step A normalises to the ANSUR baseline and Step B calibrates back to the same region. This is the correct approach for all requests, including same-region ones. Do not omit either parameter.
 - Response time is unaffected by cross-regional requests. The translation steps are coefficient lookups, not additional model calls. P99 latency remains 6–8 ms regardless of the regional combination.
+
 <br>
 <br> 
-<br>
-<br>
-
 
 > ### **Disclaimer And Limitation Of Liability**
 >
