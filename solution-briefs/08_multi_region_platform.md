@@ -1,7 +1,6 @@
 ### Global Retail & Multi-Region Platforms
 # **Crossing the Sizing Border, Honestly**
 
-<br>
 
 ### **What you're dealing with**
 
