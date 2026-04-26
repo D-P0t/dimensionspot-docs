@@ -9,17 +9,23 @@ You already know the numbers on your dashboard. Return rates in online fashion r
 
 You don't need another plugin that promises to fix this with a photo upload. Most of them don't survive the checkout funnel: camera-based onboarding drops off hard, and your customer isn't going to find a measuring tape on a mobile device.
 
+<br>
+
 ### **Where the money is**
 
 * **Returns:** Industry benchmarks for AI-driven sizing sit in the −20% to −30% returns range³. Your actual result depends on your current bracketing rate, your size chart quality, and how aggressively you surface the recommendation. We'd rather you model it against your own return data than take the headline number.
 * **Conversion:** When a customer trusts that the size they're ordering is actually the right one, they stop bracketing, they stop hesitating, and they complete the checkout. Fit anxiety is a documented cart-abandonment driver⁴ — removing it tends to lift overall conversion in the low double digits.
 * **Integration cost:** One REST endpoint, no model to train, no per-market tuning. If you have a size chart as a lookup table, the mapping is client-side Python (example in the Integration Cookbook).
 
+<br>
+
 ### **What we actually do**
 
 We take the two numbers your customer already knows — height and weight — and return the body dimensions you need to route a size: chest, natural waist, hip, shoulder breadth, inseam, thigh. 130 dimensions total, ISO 7250-1 coded, delivered in under 10ms. No photos, no scans, no extra checkout step.
 
 Cross-border fit isn't solved by a conversion table. A customer in Seoul buying from a Berlin-built size chart has different skeletal proportions, not just different label conventions. Our `input_origin_region` / `target_region` pair handles this in one request, across 7 calibrated population regions.
+
+<br>
 
 ### **Where we're upfront**
 
