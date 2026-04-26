@@ -204,13 +204,10 @@ for size_label, count in sorted(coverall_counter.items()):
 - `body_build_type: "ATHLETIC"` applies the NHANES lean-mass adjustment and is the appropriate baseline for physical and manual labour roles. Switch to `"CIVILIAN"` for office or desk-based workforces.
 - The `AFRICA` region uses male-centric calibration data with a −10% confidence penalty on FLESH dimensions for female employees. Treat FLESH dimension outputs as indicative for this subgroup and prioritise on-site confirmation where possible.
 - P99 latency is 6–8 ms per call. A workforce of 1,000 employees can be fully profiled in under 10 seconds at moderate API concurrency. For large batches, process requests concurrently rather than sequentially to stay within this window.
+
 <br>
 <br> 
-<br>
-<br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -218,5 +215,3 @@ for size_label, count in sorted(coverall_counter.items()):
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br> 
