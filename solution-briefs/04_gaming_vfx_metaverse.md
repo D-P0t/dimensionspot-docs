@@ -9,17 +9,23 @@ Character rigging at scale is the expensive part of your pipeline — you alread
 
 There's a parallel opportunity on the player-facing side: letting players build an in-game avatar that actually matches their real body. Not a stretched default with a height slider, but a character with their own skeletal proportions — their shoulder breadth, their torso-to-leg ratio, their actual build. Currently, no commercial character creator offers this, because the anthropometric data to drive it hasn't existed outside of anthropometric databases.
 
+<br>
+
 ### **Where the money is**
 
 * **Rigging iteration:** Starting with an anatomically valid skeleton shortens the manual deformation-fix loop. GDC technical presentations report rigging iteration cycles in the 30–40% range when skeleton data is parameterized rather than hand-authored¹ — that's the ballpark, and it depends on how much your pipeline is already automated.
 * **NPC crowd generation:** Procedural body diversity at the profile level (bone + flesh) means a crowd of 500 NPCs is a scripting task, not an art-days task. This is the line item where the integration tends to pay for itself fastest.
 * **Player avatars that match reality:** Players input height + weight, get a body that matches them skeletally. The fidelity difference is noticeable in first-person animation, clothing fit, and the specific feeling of "that's actually me" — which drives retention metrics in games where avatar identity matters (MMO, social, fitness).
 
+<br>
+
 ### **What we actually do**
 
 We return a 130-point anthropometric profile — bone lengths, joint heights, shoulder and hip breadths, limb proportions, and soft-tissue circumferences — from height and weight inputs, in under 10ms. Dimensions are ISO 7250-1 coded, so mapping into Unity Humanoid, Unreal MetaHuman, or a proprietary rig is a one-time import script, not an ongoing translation problem.
 
 Regional variation is a real feature. Skeletal proportions differ measurably across populations — torso-to-leg ratio, shoulder-to-hip ratio, hand proportions. If you're authoring global characters or crowds, `target_region` combined with `body_build_type` (CIVILIAN / ATHLETIC / OVERWEIGHT) gives you a matrix of statistically valid body variants without manual sculpting.
+
+<br>
 
 ### **Where we're upfront**
 
