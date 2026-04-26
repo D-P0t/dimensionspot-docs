@@ -217,13 +217,11 @@ Bundle filter: `"bundle": "LEGS_FEET"` returns the first 30 dimensions below, pl
 - `buttock_popliteal_length` → `TORSO` and `LEGS_FEET`
 
 **ISO 7250-1:2017** — ISO codes follow the 2017 revision. `—` indicates no standardised code for that dimension in the current revision. ISO codes are omitted from the response when `include_iso_codes: false` is set in `output_format`.
-<br>
+
 <br> 
 <br>
 <br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -231,5 +229,3 @@ Bundle filter: `"bundle": "LEGS_FEET"` returns the first 30 dimensions below, pl
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br>
