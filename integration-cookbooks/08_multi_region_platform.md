@@ -267,6 +267,7 @@ def get_prediction(customer_locale, merchant_config, gender, height_mm, mass_kg,
 
 <br>
 <br> 
+<br>
 
 > ### **Disclaimer And Limitation Of Liability**
 >
