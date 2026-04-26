@@ -232,7 +232,8 @@ def generate_npc_profile(gender, height_mm, target_region, body_build_type="CIVI
 - `target_region` controls skeletal proportion calibration, not just scale. East Asian profiles (`ASIA_PACIFIC`) have proportionally different torso-to-leg ratios and shoulder widths compared to `EUROPE` — this affects rig believability for regional characters.
 
 <br>
-<br> 
+<br>
+<br>
 
 > ### **Disclaimer And Limitation Of Liability**
 >
