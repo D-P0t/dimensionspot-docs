@@ -9,17 +9,23 @@ A uniform rollout for 5,000 employees is not a design problem. It's a data colle
 
 Physical sizing sessions work better — and cost you weeks per site, scheduled around shift patterns, with a clipboard, for a job that should take minutes per person.
 
+<br>
+
 ### **Where the money is**
 
 * **Clinic elimination:** The sizing clinic is the most visible time sink and the easiest to cost. Replacing it with an API call against existing HR data removes weeks from uniform rollout timelines. Onboarding can run in parallel with procurement instead of sequentially.
 * **Demand modelling:** Aggregate the profiles across the workforce and you have an exact size distribution per garment category before the PO is placed. Order 47 Medium coveralls and 23 Large jackets — not "a mixed pallet, roughly half-and-half." This is the procurement saving that compounds every refresh cycle.
 * **Zero-emergency re-orders:** The re-order cycle caused by size guesswork disappears when the initial order is sized against real workforce data.
 
+<br>
+
 ### **What we actually do**
 
 Your HRIS already stores height and weight for most employees (safety records, medical surveillance, site access). We take those two fields and return a full 130-point body profile per employee in under 10ms: jacket size inputs, trouser inseam and waist, glove size, boot length, head circumference for helmets and headgear. One API call per employee. A workforce of 1,000 runs in under 10 seconds at moderate concurrency¹.
 
 Multinational workforces get calibrated automatically. If you have operations across EMEA, APAC, and LATAM, setting `target_region` per employee cohort handles the population-level proportion differences in a single integration — no per-market offset tables, no regional spreadsheet hacks.
+
+<br>
 
 ### **Where we're upfront**
 
