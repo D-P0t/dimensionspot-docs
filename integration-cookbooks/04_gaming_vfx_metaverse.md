@@ -230,13 +230,10 @@ def generate_npc_profile(gender, height_mm, target_region, body_build_type="CIVI
 - For runtime avatar generation (user creates avatar in-app), cache the full API response client-side — re-calling the API on every scene load adds unnecessary latency and wastes API quota.
 - Normalise circumference values to [0, 1] using anatomically plausible min/max bounds before feeding into blend shape parameters — not the API's biological limit values, which represent clinical extremes rather than the visual body shape range useful for character design.
 - `target_region` controls skeletal proportion calibration, not just scale. East Asian profiles (`ASIA_PACIFIC`) have proportionally different torso-to-leg ratios and shoulder widths compared to `EUROPE` — this affects rig believability for regional characters.
+
 <br>
 <br> 
-<br>
-<br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -244,5 +241,3 @@ def generate_npc_profile(gender, height_mm, target_region, body_build_type="CIVI
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br> 
