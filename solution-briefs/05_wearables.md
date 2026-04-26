@@ -9,17 +9,23 @@ Sizing is the highest-friction moment in the wearables purchase journey. A smart
 
 And unlike an apparel e-commerce flow — where height and weight are sometimes standard profile fields — wearables checkout typically asks for shipping address and payment, and that's it. The customer has never been asked for their physical dimensions on your site before.
 
+<br>
+
 ### **Where the money is**
 
 * **Accessory attach rates:** Bands, straps, and ring SKUs that were previously "one size" or "pick from three" can be offered with a confident default preselected. Removing the "do I need to measure?" hesitation at the exact moment the customer is deciding to add the accessory to cart is where the lift shows up.
 * **Ring returns in particular:** Smart rings have an outsized return problem driven almost entirely by sizing. A correctly-predicted PIP joint width at checkout replaces the "order two sizes, return one" behavior that's become the category default.
 * **Checkout conversion:** Two fields added to the cart flow — "your height" and "your weight (optional)" — in exchange for a confirmed size recommendation. Customers who share the numbers are the same ones who would otherwise have bracketed, returned, or abandoned. The ask is small, the value exchange is clear, and the friction cost is low.
 
+<br>
+
 ### **What we actually do**
 
 We predict wrist circumference, wrist breadth, hand dimensions, finger widths (including the PIP joint width that determines ring size), and ankle circumference from height and weight — two numbers customers know by heart and will share when there's a clear reason to. In under 10ms, no additional measurement step.
 
 Ring sizing specifically depends on PIP joint width. Not hand circumference, not finger length — the proximal interphalangeal joint width is the governing dimension. We return it (`hand_digit_4_width_pip`) explicitly, because the common mistake in smart ring sizing is routing on the wrong proxy.
+
+<br>
 
 ### **Where we're upfront**
 
