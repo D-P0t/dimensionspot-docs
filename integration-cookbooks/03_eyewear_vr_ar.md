@@ -249,13 +249,10 @@ vr_fit = size_vr_headset(dims)
 - The HEAD_FACE bundle returns **20 dimensions**. With `confidence_score_threshold: 0`, all 20 are available for client-side filtering — the payload is compact. To also retrieve the four ear and head-height dimensions (`ear_protrusion`, `ear_length`, `ear_breadth`, `tragion_top_of_head`), switch to `bundle: "FULL_BODY"` or add them explicitly to `specific_dimensions`. The FULL_BODY payload is significantly larger — use `specific_dimensions` if you only need HEAD_FACE plus the ear dims.
 - For platforms serving ASIA_PACIFIC, INDIA, or MIDDLE_EAST: always pass `input_origin_region` per customer. Regional calibration has a proportionally larger effect on head and face dimensions than on body dimensions. Check `header.meta_warnings` for active fallback notices on partial-coverage regions (INDIA female, MIDDLE_EAST female fall back to GLOBAL coefficients).
 - Flag any dimension with `biological_limit_status: "OUT_OF_BOUNDS"` before using it in fit routing — out-of-bounds values fall outside population normal range and should trigger a manual review prompt rather than an automated recommendation.
+
 <br>
 <br> 
-<br>
-<br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -263,5 +260,3 @@ vr_fit = size_vr_headset(dims)
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br> 
