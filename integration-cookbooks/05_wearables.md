@@ -275,13 +275,10 @@ print(f"Suggested US ring size: {us_size}  |  ISO: {iso_circ} mm")
 - Regional calibration has a measurable effect on wrist and hand norms. Always set `target_region` to the customer's region. For `ASIA_PACIFIC`, wrist circumference norms differ from the ANSUR II baseline by up to 8–12 mm — using `GLOBAL` as default will produce systematically wrong size recommendations for Asian customers.
 - Flag any dimension with `biological_limit_status: "OUT_OF_BOUNDS"` before using it in size routing — out-of-bounds values fall outside population normal range and should prompt the customer to contact support rather than triggering an automated recommendation.
 - For ankle tracking devices, add `"ankle_circumference"` to `specific_dimensions` rather than switching to `FULL_BODY` — the HAND_ARM bundle covers hand and wrist, and a targeted `specific_dimensions` call avoids the larger FULL_BODY payload.
+
 <br>
 <br> 
-<br>
-<br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -289,5 +286,3 @@ print(f"Suggested US ring size: {us_size}  |  ISO: {iso_circ} mm")
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br> 
