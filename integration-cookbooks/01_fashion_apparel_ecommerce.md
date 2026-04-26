@@ -178,13 +178,11 @@ UI recommendation: when `between_sizes = True`, show "We recommend size M — if
 - `type: "MEASURED"` dimensions (the anchors the caller supplied) carry `confidence_score: 100` and are returned as-is — the engine never overwrites them.
 - For trouser recommendations in a single API call, use `bundle: "FULL_BODY"` or add `"inseam_length"`, `"thigh_circumference"` to `specific_dimensions`.
 - When `exact_age` is not collected, omit the field entirely — the engine defaults to ADULT. Providing `exact_age` improves the Deurenberg body-composition correction used internally, so collect it if your flow permits.
+
 <br>
 <br> 
 <br>
-<br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -192,5 +190,3 @@ UI recommendation: when `between_sizes = True`, show "We recommend size M — if
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br> 
