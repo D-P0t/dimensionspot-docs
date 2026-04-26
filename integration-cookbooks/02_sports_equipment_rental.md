@@ -175,13 +175,10 @@ def recommend_bike_frame(api_response):
 - P99 latency is 6–8 ms per call. Pre-sizing an entire day's bookings overnight in a nightly batch job is trivially fast even for a large resort.
 - For children's rental, switch `age_category` to the appropriate pediatric value and omit `anchors` — the pediatric engine requires no measurements. See [COOKBOOK_06: Childrenswear & Children's Products](COOKBOOK_06_Childrenswear_And_Childrens_Products_v2_REV.md).
 - For **international resorts** (guests from multiple origins), always set `input_origin_region` per customer — body proportion norms differ significantly across regions, particularly for foot dimensions and head circumference.
+
 <br>
 <br> 
-<br>
-<br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -189,5 +186,3 @@ def recommend_bike_frame(api_response):
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br> 
