@@ -36,6 +36,7 @@ Confidence for skeletal dimensions (inseam, head circumference, foot length) is 
 What this delivers: the uniform programme that used to block every new-site launch for six weeks now runs in parallel with onboarding. The procurement order is sized against real workforce data, not a buffer-stock guess. And the employee who would have waited three weeks for the right-size jacket now walks in on day one and finds it waiting.
 
 <br>
+<br>
 
 ---
 *¹ P99 API latency 6.2ms direct / 8.5ms Dockerised; 1,000 employees processed at moderate concurrency in under 10 seconds. ² Procurement cycle estimates based on standard medium-to-large enterprise uniform programmes; actual timelines depend on supplier lead times and HR data completeness.*
