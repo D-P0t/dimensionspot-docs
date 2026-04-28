@@ -34,6 +34,7 @@ Craniofacial dimensions are soft-tissue influenced and sit at slightly lower con
 For everything else — which is the majority of your returns — here's what it means: the customer trades two numbers they already know for a confident size recommendation, the frame front width and bridge are right the first time, and the return reason you see most often in your dashboard stops appearing as often. Same checkout, fewer parcels coming back.
 
 <br>
+<br>
 
 ---
 *¹ Farkas, L.G. et al., "International Anthropometric Study of Facial Morphology in Various Ethnic Groups," Plastic & Reconstructive Surgery, 2005. ² Population calibration: ANSUR II (North America) + regional anthropometric sources; coverage notes in API reference.*
