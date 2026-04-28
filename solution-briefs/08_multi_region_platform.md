@@ -34,6 +34,7 @@ Our region coverage is not uniform, and we say so in the documentation. We calib
 Here's what that means for your expansion roadmap: in the regions where our calibration is full (which cover the majority of global consumer purchasing power), you get population-accurate fit from the first order in a new market. In the regions where coverage is partial, you get a known-quality floor with documented limitations, not a black box that fails silently. Either way, the cross-border returns line item — the one that quietly erodes every new-market margin projection — compresses from day one of launch.
 
 <br>
+<br>
 
 ---
 *¹ Pitney Bowes BOXpoll, "International Returns Study," 2023. ² Regional calibration source data: ANSUR II (DoD, public domain), NHANES (CDC, public domain), published regional anthropometric studies. Coverage notes per region in API reference.*
