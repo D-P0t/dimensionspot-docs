@@ -34,6 +34,7 @@ This is not a mesh generator and not a rigger. We give you the measurement found
 For a 3D character pipeline, that's exactly the precision you want: enough signal to stop the deformation problems that come from made-up proportions, without pretending to replace the artist in the loop. Your technical artists stop fighting the same joint problems on every new character build. Your NPC crowds look like populations instead of clones. And the players you give a "match my real body" option to are the ones who tend to become the long-retention cohort.
 
 <br>
+<br>
 
 ---
 *¹ Projected 30–40% iteration reduction based on GDC technical presentations (2022–2024); actual savings depend on pipeline architecture and baseline automation level.*
