@@ -35,4 +35,3 @@ Here's what that means for your checkout: a customer who didn't know their ring 
 
 <br>
 
----
