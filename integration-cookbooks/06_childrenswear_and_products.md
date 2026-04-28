@@ -59,10 +59,10 @@
 To define the dimensional envelope for a product labeled "Ages 2–4", call the API at the lower and upper bracket boundaries (`exact_age: 2.0` and `exact_age: 4.0`). The difference between the two responses sets the dimensional range the product must accommodate.
 
 ```bash
-curl -X POST "https://dimensionspot.p.rapidapi.com/v1/predict" \
+curl -X POST "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Key: YOUR_API_KEY" \
-  -H "X-RapidAPI-Host: dimensionspot.p.rapidapi.com" \
+  -H "X-RapidAPI-Key: YOUR_KEY" \
+  -H "X-RapidAPI-Host: dimensionspot-bodysize-engine.p.rapidapi.com" \
   -d '{
     "input_data": {
       "input_unit_system": "metric",
@@ -104,10 +104,10 @@ Call the same age twice with different `target_region` values to compare the CDC
 
 ```bash
 # Call 1 — European profile for age 4 male
-curl -X POST "https://dimensionspot.p.rapidapi.com/v1/predict" \
+curl -X POST "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Key: YOUR_API_KEY" \
-  -H "X-RapidAPI-Host: dimensionspot.p.rapidapi.com" \
+  -H "X-RapidAPI-Key: YOUR_KEY" \
+  -H "X-RapidAPI-Host: dimensionspot-bodysize-engine.p.rapidapi.com" \
   -d '{
     "input_data": {
       "input_unit_system": "metric",
