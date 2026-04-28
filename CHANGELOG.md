@@ -193,13 +193,11 @@ The API is calibrated to never overpromise. The Confidence Score gap (stated con
 
 *DimensionsPot API is developed and maintained by the DimensionsPot engineering team.*  
 *For support: support@dimensionspot.com*
+
 <br>
 <br> 
 <br>
-<br>
 
-> <br>
->
 > ### **Disclaimer And Limitation Of Liability**
 >
 > All outputs of the DimensionsPot API ("Outputs") are statistically derived anthropometric predictions intended to support — not replace — professional judgment. They do not constitute medical, clinical, ergonomic, or professional advice, and must not be used as the sole basis for health decisions, product design, manufacturing tolerances, safety assessments, regulatory submissions, or contractual specifications. The Confidence Score is a proprietary heuristic index — not a statistical confidence interval.
@@ -207,5 +205,3 @@ The API is calibrated to never overpromise. The Confidence Score gap (stated con
 > To the fullest extent permitted by applicable law, DimensionsPot and its operators disclaim all liability for any direct, indirect, incidental, consequential, or punitive damages — including bodily injury, property damage, financial loss, business interruption, or contractual liability — arising from reliance on Outputs.
 >
 > *This disclaimer does not exclude liability where prohibited by mandatory applicable law.*
->
-> <br> 
