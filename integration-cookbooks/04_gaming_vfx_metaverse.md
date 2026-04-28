@@ -45,10 +45,10 @@
 ## Sample Request — User Self-Avatar (ASIA_PACIFIC, male)
 
 ```bash
-curl -X POST "https://dimensionspot.p.rapidapi.com/v1/predict" \
+curl -X POST "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Key: YOUR_API_KEY" \
-  -H "X-RapidAPI-Host: dimensionspot.p.rapidapi.com" \
+  -H "X-RapidAPI-Key: YOUR_KEY" \
+  -H "X-RapidAPI-Host: dimensionspot-bodysize-engine.p.rapidapi.com" \
   -d '{
     "input_data": {
       "input_unit_system": "metric",
