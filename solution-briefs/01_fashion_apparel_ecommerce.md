@@ -34,6 +34,7 @@ With height + weight (our `PRIMARY_BOTH` tier), skeletal dimensions score around
 Here's what that means for you: those numbers are good enough to drive a confident size recommendation against your existing size chart, across your existing regions, with your existing checkout. You stop your customers from guessing, bracketing drops, and the returns line item compresses. That's the outcome, and it's delivered through two fields you're already collecting.
 
 <br>
+<br>
 
 ---
 *¹ Statista, Global E-Commerce Returns Rate by Vertical, 2024. ² Narvar Consumer Report, 2024. ³ Industry estimates for fit-tech integrations; results vary by vertical and implementation. ⁴ Baymard Institute, E-Commerce UX research, 2024.*
