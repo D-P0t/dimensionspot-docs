@@ -35,6 +35,7 @@ These are population medians and percentiles, not predictions of a specific chil
 What that means for you: your size labels stop being vague and start being verifiable. A parent reads "fits most children until approximately age 3.5" on your listing and can compare it against their own child's measurements. Your sourcing team signs contracts with dimensional validation, not hope. And your designers work from a CDC-grounded dimensional envelope instead of a competitor's guesswork copied forward one more season.
 
 <br>
+<br>
 
 ---
 *¹ CDC Clinical Growth Charts (public domain): https://www.cdc.gov/growthcharts/clinical_charts.htm. ² All projections based on CDC 50th percentile growth curves; variance around the median is quantified via `range_95` in every response.*
