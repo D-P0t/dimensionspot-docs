@@ -25,12 +25,12 @@ Set `calculation_model` to `"AUTO"` (the default) and routing happens automatica
 
 ## Authentication
 
-Subscribe on [RapidAPI](https://rapidapi.com/dimensionspot) and copy your key from the
+Subscribe on [RapidAPI](https://rapidapi.com/d-pot-apps/api/dimensionspot-bodysize-engine) and copy your key from the
 dashboard. Two headers are required on every request:
 
 ```
 X-RapidAPI-Key: YOUR_KEY
-X-RapidAPI-Host: dimensionspot.p.rapidapi.com
+X-RapidAPI-Host: dimensionspot-bodysize-engine.p.rapidapi.com
 ```
 
 ---
@@ -47,10 +47,10 @@ A complete, copy-paste-ready request. All fields are shown with explicit values;
 noted in the Reference section below.
 
 ```bash
-curl -X POST "https://dimensionspot.p.rapidapi.com/v1/predict" \
+curl -X POST "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict" \
   -H "Content-Type: application/json" \
   -H "X-RapidAPI-Key: YOUR_KEY" \
-  -H "X-RapidAPI-Host: dimensionspot.p.rapidapi.com" \
+  -H "X-RapidAPI-Host: dimensionspot-bodysize-engine.p.rapidapi.com" \
   -d '{
     "input_data": {
       "input_unit_system": "metric",
@@ -121,11 +121,11 @@ payload = {
 }
 
 response = requests.post(
-    "https://dimensionspot.p.rapidapi.com/v1/predict",
+    "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict",
     json=payload,
     headers={
         "X-RapidAPI-Key": "YOUR_KEY",
-        "X-RapidAPI-Host": "dimensionspot.p.rapidapi.com"
+        "X-RapidAPI-Host": "dimensionspot-bodysize-engine.p.rapidapi.com"
     }
 )
 dimensions = response.json()["body_dimensions"]
@@ -290,10 +290,10 @@ reports `"anchors_calculated": true` in the response header.
 Set `input_unit_system: "imperial"` when your anchor values are in inches and lbs:
 
 ```bash
-curl -X POST "https://dimensionspot.p.rapidapi.com/v1/predict" \
+curl -X POST "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict" \
   -H "Content-Type: application/json" \
   -H "X-RapidAPI-Key: YOUR_KEY" \
-  -H "X-RapidAPI-Host: dimensionspot.p.rapidapi.com" \
+  -H "X-RapidAPI-Host: dimensionspot-bodysize-engine.p.rapidapi.com" \
   -d '{
     "input_data": {
       "input_unit_system": "imperial",
@@ -629,7 +629,7 @@ error message.
 **`GET /health`** — Liveness / readiness probe
 
 ```bash
-curl https://dimensionspot.p.rapidapi.com/health \
+curl https://dimensionspot-bodysize-engine.p.rapidapi.com/health \
   -H "X-RapidAPI-Key: YOUR_KEY"
 ```
 
@@ -651,7 +651,7 @@ are missing — container orchestrators use this to pause traffic until the inst
 **`GET /v1/info`** — Capability discovery
 
 ```bash
-curl https://dimensionspot.p.rapidapi.com/v1/info \
+curl https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/info \
   -H "X-RapidAPI-Key: YOUR_KEY"
 ```
 
@@ -665,7 +665,7 @@ Use it for programmatic enum validation instead of hardcoding allowed values.
 **`GET /v1/predict/examples`** — Pre-built request payloads
 
 ```bash
-curl https://dimensionspot.p.rapidapi.com/v1/predict/examples \
+curl https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict/examples \
   -H "X-RapidAPI-Key: YOUR_KEY"
 ```
 
@@ -682,23 +682,10 @@ Returns 8 ready-to-use request payloads covering the main use cases:
 | 7 | Body build type — output morphed to selected body type |
 | 8 | Pediatric model — applies LMS + Ridge hybrid |
 
-Copy any `payload` field directly into `POST /v1/predict`. In Swagger UI (`/docs`), the same
-examples appear in the **Examples** dropdown on the predict endpoint — no copy-paste needed.
-
-<br>
-
-**`GET /docs`** — Swagger UI
-
-```
-https://dimensionspot.p.rapidapi.com/docs
-```
-
-Full OpenAPI interface with inline schema explorer, all 8 examples pre-loaded in the dropdown,
-and live **Try it out** execution. The fastest way to explore the API without writing any code.
+Copy any `payload` field directly into `POST /v1/predict`.
 
 <br>
 <br> 
-<br>
 <br>
 
 > ### **Disclaimer And Limitation Of Liability**
