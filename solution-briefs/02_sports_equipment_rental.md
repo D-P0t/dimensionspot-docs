@@ -34,6 +34,7 @@ Our confidence index sits around 85 for skeletal dimensions (foot length, head c
 Here's what that means at the counter: for the 80–90% of rentals that are standard recreational gear, the customer walks in, their size is already staged, and the handover is a two-minute conversation instead of a ten-minute trial session. The peak-hour queue drops, your procurement is sized against real demand, and the specialists on your team are free to spend their time on the customers who actually need them.
 
 <br>
+<br>
 
 ---
 *¹ Estimate based on industry time-motion benchmarks for ski boot fitting (7–9 min trial-and-error vs. 3–4 min pre-sized handover). Actual throughput gains depend on customer mix and facility layout.*
