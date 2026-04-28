@@ -43,10 +43,10 @@
 ## Sample Request
 
 ```bash
-curl -X POST "https://dimensionspot.p.rapidapi.com/v1/predict" \
+curl -X POST "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict" \
   -H "Content-Type: application/json" \
-  -H "X-RapidAPI-Key: YOUR_API_KEY" \
-  -H "X-RapidAPI-Host: dimensionspot.p.rapidapi.com" \
+  -H "X-RapidAPI-Key: YOUR_KEY" \
+  -H "X-RapidAPI-Host: dimensionspot-bodysize-engine.p.rapidapi.com" \
   -d '{
     "input_data": {
       "input_unit_system": "metric",
@@ -90,11 +90,11 @@ Size an entire workforce from an HR export in a single script:
 ```python
 import requests
 
-API_URL = "https://dimensionspot.p.rapidapi.com/v1/predict"
+API_URL = "https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict"
 HEADERS = {
     "Content-Type": "application/json",
-    "X-RapidAPI-Key": "YOUR_API_KEY",
-    "X-RapidAPI-Host": "dimensionspot.p.rapidapi.com"
+    "X-RapidAPI-Key": "YOUR_KEY",
+    "X-RapidAPI-Host": "dimensionspot-bodysize-engine.p.rapidapi.com"
 }
 
 def size_employee(employee_id, gender, age, height_mm, weight_kg, region="GLOBAL"):
