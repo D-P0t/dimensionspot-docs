@@ -1,5 +1,9 @@
 # DimensionsPot - BodySize Engine: **Quick Start**
 
+<kbd>**DATA DICTIONARY:** All 130 dimensions with API Keys</kbd>&nbsp;→&nbsp;[view](https://github.com/D-P0t/dimensionspot-api/blob/main/DATA_DICTIONARY.md)
+
+<br>
+
 **DimensionsPot** transforms one or more body measurements into a complete anthropometric
 profile of **130 ISO-compliant body dimensions**, each accompanied by a Confidence Score
 and a 95% prediction interval.
