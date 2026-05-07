@@ -13,9 +13,13 @@ DimensionsPot is a REST API that **generates a comprehensive anthropometric prof
 
 The engine takes as little as a single known "anchor" measurement and gender to infer a complete profile of 130 body dimensions in under 10ms. It uses statistical regression models to fill the data gap, providing a calibrated **Confidence Score for every output**. Height and weight — the two measurements most users know without a tape — are the strongest anchors, and adding any circumference on top of these anchors pushes precision and Confidence Score even higher. That said, the API works with any single body measurement. This allows you to **automate sizing logic, ergonomic presets, or avatar scaling without specialized hardware**.
 
+<br>
+
 ### **No Black Box**
 
 DimensionsPot does not use a neural network or generative AI. Every prediction is produced by a **Ridge Regression model** — a well-understood, interpretable statistical method — trained on peer-reviewed anthropometric datasets (ANSUR II, NHANES, CDC Growth Charts). The pediatric engine uses the **LMS Box-Cox method**, the clinical standard behind CDC and WHO growth charts. Body composition adjustments apply the **Deurenberg equation**; anatomical detail is injected via **Greiner-style ratio models**. Every output dimension is validated against **NASA-STD-3001** structural limits (adults) and **CDC P1–P99** age-banded bounds (pediatric) before it reaches you. The model cannot hallucinate — it is bounded by population science, not by probability sampling over a training corpus.
+
+<br>
 
 ### **Privacy-by-Design: Why No Photos?**
 
