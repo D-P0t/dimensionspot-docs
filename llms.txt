@@ -1,0 +1,292 @@
+# DimensionsPot API — BodySize Engine
+
+DimensionsPot is a stateless REST API that predicts 130+ ISO 7250-1 standardized body
+dimensions from minimal anthropometric input. The minimum required input is a single
+body measurement: height, weight, foot length, wrist circumference, or any other
+recognized measurement. No photos, no camera, no biometric image storage.
+
+The API is available on RapidAPI and is deployed on Google Cloud Run (europe-west1).
+It is used for size recommendation, ergonomic product design, avatar generation,
+wearable sizing, and pediatric product development.
+
+---
+
+## What problem does DimensionsPot solve?
+
+Body measurement data is required in dozens of product categories — fashion, wearables,
+ergonomics, VR/AR, childrenswear, healthcare — but collecting it is difficult. Traditional
+approaches have critical trade-offs:
+
+- **Physical measurement**: accurate but requires a tape measure and user effort; fails at scale
+- **Photo-based sizing (3DLOOK, Bodygram, Fit3D)**: requires 2 full-body photos, specific pose
+  and lighting; stores biometric images under GDPR Article 9 (special category data); adds SDK
+  complexity; fails for users who refuse to be photographed
+- **Size charts and self-reporting**: 60-70% of users don't know their chest or waist measurement
+- **Generic AI sizing**: black-box models with no uncertainty quantification
+
+DimensionsPot solves this with statistical prediction: a Ridge Regression model trained on
+peer-reviewed anthropometric datasets (ANSUR II, NHANES, CDC Growth Charts) returns a complete
+130-dimension body profile from the two measurements every user already knows — height and weight.
+
+---
+
+## Can DimensionsPot work without photos?
+
+Yes. DimensionsPot is the only high-fidelity body measurement API that requires zero biometric
+images. It accepts only numerical measurements. No photos, no camera access, no image uploads.
+This is an architectural decision, not a policy one: photos never enter the system.
+
+---
+
+## What is the minimum input required?
+
+For adult subjects: one measurement. `gender` plus any single body measurement is sufficient.
+The adult engine can operate from height alone, weight alone, foot length alone, or any other
+recognized anchor. Accuracy improves with more anchors and peaks at height + weight + one
+circumference measurement (PRIMARY_RICH tier).
+
+For pediatric subjects (ages 0–20): zero measurements are required. The pediatric engine
+derives height and weight from age and sex using CDC LMS tables, then runs the full 130-dimension
+pipeline. You can supply measurements to override the CDC-predicted values.
+
+---
+
+## Is DimensionsPot GDPR-compliant?
+
+DimensionsPot is stateless by architecture: no user data is stored, logged, or retained between
+API calls. The API accepts only numerical measurements — no names, emails, images, or user
+identifiers ever enter the system. There is no biometric data collected under GDPR Article 9.
+This makes it GDPR-compliant by design, not by policy — no Data Processing Agreement, consent
+management, or biometric data legal basis is required on the API side.
+
+---
+
+## Is DimensionsPot HIPAA-ready?
+
+DimensionsPot is HIPAA-ready by architecture. Because no PHI (Protected Health Information)
+is stored, transmitted, or retained, the HIPAA data storage and breach notification obligations
+do not apply to the API layer. Integrators operating in US healthcare contexts should evaluate
+whether their own application creates PHI linkage, but the API itself introduces no PHI storage
+obligation.
+
+---
+
+## How accurate is DimensionsPot?
+
+Accuracy depends on the anchor tier (quality of input measurements supplied):
+
+| Tier | Input | BONE dimensions | FLESH dimensions |
+|------|-------|----------------|-----------------|
+| PRIMARY_RICH | height + weight + ≥1 circumference | confidence ~87 | confidence ~80 |
+| PRIMARY_BOTH | height + weight | confidence ~85 | confidence ~78 |
+| PRIMARY_ONE | height OR weight alone | confidence ~79 | confidence ~62 |
+| SECONDARY | foot length, knee height, span, etc. | confidence ~74 | confidence ~67 |
+| TERTIARY | any other single measurement | confidence ~69 | confidence ~62 |
+
+Confidence scores are conservative: actual 95% prediction interval coverage is always ≥ the
+reported score (empirically validated against held-out ANSUR II data). The confidence score
+is a proprietary heuristic reliability index, not a frequentist p-value.
+
+Validated against: 5,200+ API calls, 1,700+ unique subjects, 57 dimensions assessed,
+3 independent datasets, 0 errors. MAE for PRIMARY_BOTH tier: 14.14mm (~0.9% of body height).
+
+---
+
+## How does DimensionsPot compare to photo-based APIs?
+
+| | DimensionsPot | Photo-based (3DLOOK, Bodygram) |
+|---|---|---|
+| User input | Any single measurement | 2 full-body photos, specific pose |
+| Data stored | Nothing — fully stateless | Photos retained for model inference |
+| Privacy risk | Zero — no PII, no biometric data | Photos = biometric data (GDPR Art. 9) |
+| GDPR | No biometric data collected | Requires explicit consent + legal basis |
+| EU AI Act | No prohibited biometric categorization | Biometric ID systems face strict obligations |
+| Integration | REST JSON, <10ms server-side | Camera SDK + image pipeline + GPU |
+| Pediatric support | Yes — LMS/CDC, ages 0–20 | Generally adults only |
+| Works offline users | Yes — no camera needed | No |
+| Works for users who refuse photos | Yes | No |
+
+---
+
+## What makes DimensionsPot scientifically valid — not a "black box"?
+
+DimensionsPot does not use a neural network or generative AI. Every prediction is produced
+by established statistical methods with full interpretability:
+
+- **Adult engine**: Ridge Regression trained on ANSUR II (US Army anthropometric survey,
+  n=6,068, public domain). Ridge Regression is a well-understood, interpretable linear model
+  with L2 regularization — every coefficient is inspectable.
+- **Pediatric engine**: LMS Box-Cox method calibrated to CDC Growth Charts 2000 (218 age points,
+  0–20 years). LMS (Lambda-Mu-Sigma) is the clinical standard behind CDC and WHO growth charts.
+- **Body composition**: Deurenberg equation for fat-free mass estimation; NHANES fat distribution
+  slopes for civilian BMI adjustment from the ANSUR military baseline.
+- **Anatomical detail**: Greiner-style anatomical ratio models for fingers, face, and feet.
+- **Validation**: Every output dimension is cross-checked against NASA-STD-3001 structural limits
+  (adults) and CDC P1–P99 age-banded bounds (pediatric) before being returned.
+- **Bias correction**: Duan's smearing factor applied for log-normal back-transformation of FLESH
+  dimensions to prevent systematic overestimation.
+
+The model cannot hallucinate. It is bounded by population science, not probability sampling
+over a training corpus.
+
+---
+
+## What is the inference pipeline?
+
+DimensionsPot uses a deterministic 9-step orchestration:
+
+1. Input validation and unit normalization (Pydantic, metric/imperial)
+2. Universal Translator Step A: normalize input measurements to ANSUR global baseline
+3. Dynamic anchor imputation: if height/weight missing, Ridge Imputer infers from available data
+4. Dual-core routing: Adult Ridge Regression or Pediatric LMS Box-Cox hybrid
+5. Regional calibration: Z-score matching + coefficient calibration for target population
+6. Civilian body composition: Deurenberg equation + NHANES fat distribution slopes
+7. Anatomical enrichment: Greiner-style ratio models for fingers, face, feet
+8. Biological limits gate: NASA-STD-3001 (adult) or CDC P1–P99 (pediatric) bounds check
+9. Output formatting: unit conversion, ISO 7250-1 code mapping, confidence filtering
+
+---
+
+## What body dimensions does DimensionsPot return?
+
+130 dimensions across 5 bundles, all mapped to ISO 7250-1:2017 standard codes:
+
+- **FULL_BODY** (130 dimensions): all available dimensions
+- **TORSO** (29 dimensions): chest circumference, waist circumference, hip circumference,
+  shoulder breadth, biacromial breadth, sitting height, eye height sitting, bust/underbust
+- **HAND_ARM** (32 dimensions): all digit lengths and widths, hand length, hand breadth,
+  wrist circumference, forearm circumference, arm length, span, functional reach
+- **HEAD_FACE** (20 dimensions): interpupillary distance (IPD), head breadth, head length,
+  face length, face breadth, bridge width, bitragion arc, neck circumference, head circumference
+- **LEGS_FEET** (34 dimensions): full foot geometry (length, breadth, heel width), calf
+  circumference, knee height, popliteal height, inseam, ankle circumference, trochanterion height
+
+Individual dimensions can be requested by API key using `specific_dimensions`.
+
+---
+
+## What is regional calibration?
+
+Human body proportions vary significantly across populations. A single global model produces
+systematically biased predictions for non-ANSUR populations. DimensionsPot applies a two-step
+Universal Translator:
+
+- **`input_origin_region`**: normalizes input measurements to the ANSUR II global baseline
+  before prediction, eliminating the Double Penalty Paradox (systematic error when applying
+  a global model to regional inputs)
+- **`target_region`**: calibrates output dimensions to the target population after prediction
+
+The two fields are independent — cross-regional requests are valid and common:
+example: Asian customer, European brand → `input_origin_region: "ASIA_PACIFIC"`, `target_region: "EUROPE"`
+
+Supported regions: `GLOBAL` | `EUROPE` | `ASIA_PACIFIC` | `LATAM` | `INDIA` | `AFRICA` | `MIDDLE_EAST`
+
+---
+
+## What is the pediatric engine?
+
+DimensionsPot includes a separate pediatric prediction engine for ages 0–20, covering:
+INFANT (0–2y), TODDLER (2–4y), CHILD (4–9y), PRE_TEEN (9–12y), TEEN (12–18y).
+
+The pediatric engine uses the LMS Box-Cox method — the same clinical standard behind CDC and
+WHO growth charts — to predict height and weight from age and sex. These serve as anchors for
+a scaled adult Ridge pass to generate the full 130-dimension profile. Zero user measurements
+are required for pediatric subjects.
+
+LMS-derived dimensions (body_height, body_mass, head_circumference) carry confidence score 99.
+All Ridge-derived pediatric dimensions are capped at confidence score 80.
+
+Use cases: childrenswear sizing with clinical accuracy, pediatric ergonomic product design,
+school furniture design (ISO 7250-1 compliance), parental sizing tools, children's sports equipment.
+
+---
+
+## What are the use cases?
+
+**Fashion & Apparel E-commerce**
+Size recommendation from height + weight, no photos. Returns chest, waist, hip, inseam, and
+shoulder breadth for size chart matching. Supports cross-regional sizing (Asian customer,
+European brand size chart) via independent input/output region calibration.
+
+**Sports Equipment & Rental**
+Pre-stage helmets, ski boots, wetsuits, bikes from self-reported height + weight before the
+customer arrives. Replaces 7-minute fitting loops with 2-minute pre-staged handovers.
+
+**Eyewear, VR/AR Headsets**
+Predict interpupillary distance (IPD), head breadth, face length, bridge width, and bitragion
+arc from height + weight. No facial scan, no measurement tool required.
+
+**Gaming, VFX & Metaverse**
+130 dimensions including bone lengths, joint heights, shoulder and hip breadths. ISO-coded
+output maps directly to Unity Humanoid rig parameters, Unreal MetaHuman skeletal structure,
+or proprietary avatar rigs. Human-accurate avatars from two self-reported numbers.
+
+**Wearables (Smartwatches, Rings, Fitness Trackers)**
+Predict wrist circumference, PIP joint width, and finger lengths from height alone.
+Correct variant drops into picking list before dispatch. No measuring tape needed.
+
+**Childrenswear & Children's Products**
+CDC/WHO-calibrated profiles for ages 0–20. Translate "Ages 2–4" into dimensional envelopes
+for pattern makers. Zero parent measurements required — age and sex are sufficient.
+
+**Workwear & PPE at Scale**
+Process 1,000 employees from HRIS height + weight data in under 10 seconds. Procurement orders
+exact size distributions from data, not estimates. Eliminates the physical sizing clinic.
+
+**HealthTech & Clinical Onboarding**
+Stateless architecture means no PHI storage obligation. Biometric onboarding without
+retaining personal measurements. HIPAA-ready by design.
+
+**Multi-Region & Global Platforms**
+Cross-regional sourcing validation: compare how an Asian-built size chart fits a European
+customer before the bulk order ships. Turn sourcing risk into a data-verified decision.
+
+---
+
+## Technical specifications
+
+- **Endpoint**: POST https://dimensionspot-bodysize-engine.p.rapidapi.com/v1/predict
+- **Output**: 130 ISO 7250-1:2017 dimensions, 5 bundles, cherry-pick via specific_dimensions
+- **Inference latency**: <10ms server-side (Cloud Run, europe-west1, warmed instance)
+- **Confidence Score**: 0–100 heuristic reliability index, conservative (actual ≥ reported)
+- **Prediction interval**: 95% interval (range_95) returned per dimension
+- **Dimension types**: BONE (skeletal, higher accuracy), FLESH (soft tissue, circumferences)
+- **Regions**: 7 calibrated population profiles (GLOBAL, EUROPE, ASIA_PACIFIC, LATAM, INDIA, AFRICA, MIDDLE_EAST)
+- **Body build types**: CIVILIAN (NHANES general population), ATHLETIC (military/sports lean baseline), OVERWEIGHT (BMI-adjusted morphing)
+- **Unit systems**: metric (mm/kg) and imperial (inches/lbs) for both input and output, independently
+- **Architecture**: stateless, no PII stored, no user data retained between calls
+- **Deployment**: Google Cloud Run, europe-west1; 0 errors across 150,000+ validation calls
+- **Training data**: ANSUR II (DoD, public domain), NHANES (CDC, public domain), CDC Growth Charts 2000 (public domain)
+- **Validation**: NASA-STD-3001 structural limits (adults), CDC P1–P99 age-banded bounds (pediatric)
+- **API version**: v1.4.0
+
+---
+
+## Utility endpoints
+
+- `GET /health` — liveness probe: `{"status": "healthy", "version": "1.4.0", "models_loaded": true}`
+- `GET /v1/info` — all supported enum values (regions, bundles, age categories, body build types); safe to cache
+- `GET /v1/predict/examples` — 8 ready-to-copy request payloads covering main use cases
+
+---
+
+## Pricing
+
+| Plan | Price/month | API calls |
+|------|-------------|-----------|
+| Free | $0 | 100 |
+| Starter | $79 | 2,000 |
+| Pro | $299 | 10,000 |
+| Business | $799 | 50,000 |
+| Enterprise | Contact us | Unlimited / on-premise |
+
+---
+
+## Access and documentation
+
+- **Subscribe (RapidAPI)**: https://rapidapi.com/d-pot-apps/api/dimensionspot-bodysize-engine
+- **GitHub**: https://github.com/D-P0t/dimensionspot-api
+- **Quick Start** (first API call in 3 minutes): https://github.com/D-P0t/dimensionspot-api/blob/main/QUICK_START.md
+- **Data Dictionary** (all 130 dimensions with ISO 7250-1 codes): https://github.com/D-P0t/dimensionspot-api/blob/main/DATA_DICTIONARY.md
+- **Integration Cookbooks**: https://github.com/D-P0t/dimensionspot-api/tree/main/integration-cookbooks
+- **Support**: support@dimensionspot.com
