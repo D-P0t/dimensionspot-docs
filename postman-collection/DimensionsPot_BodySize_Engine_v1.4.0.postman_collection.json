@@ -1,0 +1,812 @@
+{
+    "info": {
+        "_postman_id": "d1f7a3e2-b5c8-4a90-8f6d-2e9c0a1b4d7f",
+        "name": "DimensionsPot | BodySize Engine v1.4.0",
+        "description": "Official Postman collection for the DimensionsPot BodySize Engine API (v1.4.0).\n\nPredicts 130 ISO 7250-1 standardized body dimensions from minimal anthropometric input. No photos, no biometric image processing, fully stateless — GDPR/HIPAA-ready by architecture.\n\n## Quick Setup\n\n1. Open **Edit Collection → Variables** tab\n2. Set `rapidapi_key` to your RapidAPI subscription key\n3. Subscribe at https://rapidapi.com/d-pot-apps/api/dimensionspot-bodysize-engine\n4. Run **Health Check** first to confirm connectivity\n\n---\n\n## Prediction Scenarios\n\n| # | Scenario | Anchor Tier | Bundle |\n|---|----------|-------------|--------|\n| 01 | Strong Anchors — height + weight | PRIMARY_BOTH (~85/78) | FULL_BODY |\n| 02 | Rich Anchors — + waist circumference | PRIMARY_RICH (~87/80) | TORSO |\n| 03 | Single Anchor — foot length only | SECONDARY (~74/67) | FULL_BODY |\n| 04 | Targeted Dimensions — 4 cherry-picked | PRIMARY_BOTH | custom |\n| 05 | Bundle Filter — HAND_ARM only | SECONDARY | HAND_ARM |\n| 06 | Regional Calibration — ASIA_PACIFIC | PRIMARY_BOTH | FULL_BODY |\n| 07 | Body Build Type — OVERWEIGHT morphing | PRIMARY_BOTH | FULL_BODY |\n| 08 | Pediatric Engine — age 7 female | LMS (99/80) | HEAD_FACE |\n| 09 | Imperial Input — inches + lbs | PRIMARY_BOTH | TORSO |\n\n---\n\n## Key Rules\n\n- `body_height` is in **millimeters** — 178 cm → `1780` (NOT 178)\n- `body_mass` is in **kilograms**\n- Imperial input: set `input_unit_system: \"imperial\"` — lengths in inches, mass in lbs\n- Pediatric engine activates automatically when `exact_age ≤ 20`\n- Adult engine requires at least one anchor; pediatric requires none\n- Allowed regions: `GLOBAL | EUROPE | ASIA_PACIFIC | AFRICA | LATAM | INDIA | MIDDLE_EAST`\n- Allowed bundles: `FULL_BODY | TORSO | HAND_ARM | HEAD_FACE | LEGS_FEET`\n- Allowed body_build_type: `CIVILIAN | ATHLETIC | OVERWEIGHT`\n\n---\n\n## Documentation\n\n- GitHub: https://github.com/D-P0t/dimensionspot-api\n- Data Dictionary (all 130 dimensions): https://github.com/D-P0t/dimensionspot-api/blob/main/DATA_DICTIONARY.md\n- RapidAPI: https://rapidapi.com/d-pot-apps/api/dimensionspot-bodysize-engine",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "rapidapi_key",
+            "value": "YOUR_RAPIDAPI_KEY",
+            "description": "Your RapidAPI subscription key for DimensionsPot BodySize Engine. Get it at: https://rapidapi.com/d-pot-apps/api/dimensionspot-bodysize-engine",
+            "type": "string"
+        },
+        {
+            "key": "base_url",
+            "value": "https://dimensionspot-bodysize-engine.p.rapidapi.com",
+            "description": "API base URL via RapidAPI gateway — do not change",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "Prediction",
+            "description": "POST /v1/predict — Main prediction endpoint.\n\n9 scenarios covering the full range of API capabilities: strong anchors, rich anchors, single-anchor imputation, cherry-picked dimensions, bundle filtering, regional calibration, body build morphing, pediatric engine, and imperial input.",
+            "item": [
+                {
+                    "name": "01 — Strong Anchors | height + weight | FULL_BODY",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has body_dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Adult engine was used\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.header.calculation_model_used).to.equal(\"ADULT\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Header has anchor tier\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.header).to.have.property(\"anchor_tier\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"male\",\n      \"exact_age\": 35.0,\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"GLOBAL\"\n    },\n    \"anchors\": {\n      \"body_height\": 1780,\n      \"body_mass\": 82.0\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"GLOBAL\",\n      \"body_build_type\": \"CIVILIAN\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"FULL_BODY\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": true\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns all 130 full-body dimensions at PRIMARY_BOTH confidence tier (BONE ~85, FLESH ~78).\n\nThe baseline input pattern: two primary anchors (height + weight), full FULL_BODY output with ISO 7250-1 codes and 95% prediction intervals.\n\n**Anchor tier**: PRIMARY_BOTH\n**Engine**: ADULT (Ridge Regression, ANSUR II)\n**Expected dimensions**: 130\n**confidence_score**: BONE ~85, FLESH ~78"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "02 — Rich Anchors | + waist circumference | TORSO | PRIMARY_RICH",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has body_dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Anchor tier is PRIMARY_RICH\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.header.anchor_tier).to.equal(\"PRIMARY_RICH\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"waist_circumference_omphalion type is MEASURED\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    var dims = body.body_dimensions;",
+                                    "    if (dims.waist_circumference_omphalion) {",
+                                    "        pm.expect(dims.waist_circumference_omphalion.type).to.equal(\"MEASURED\");",
+                                    "        pm.expect(dims.waist_circumference_omphalion.confidence_score).to.equal(100);",
+                                    "    }",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"male\",\n      \"exact_age\": 38.0,\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"EUROPE\"\n    },\n    \"anchors\": {\n      \"body_height\": 1810,\n      \"body_mass\": 85.0,\n      \"waist_circumference_omphalion\": 880.0\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"EUROPE\",\n      \"body_build_type\": \"CIVILIAN\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"TORSO\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 75,\n      \"include_range_95\": true,\n      \"include_iso_codes\": true\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns 29 TORSO dimensions at PRIMARY_RICH tier. Adding one precision circumference anchor (`waist_circumference_omphalion`) elevates confidence scores across all FLESH dimensions.\n\n`confidence_score_threshold: 75` filters the response to high-confidence dimensions only — the supplied waist anchor is returned as `type: MEASURED` with `confidence_score: 100`.\n\n**Anchor tier**: PRIMARY_RICH\n**Engine**: ADULT (EUROPE calibration)\n**Expected dimensions**: up to 29 (filtered by threshold ≥75)\n**confidence_score**: BONE ~87, FLESH ~80\n\n**Precision circumferences that unlock PRIMARY_RICH**:\n`chest_circumference`, `waist_circumference_omphalion`, `hip_circumference`, `neck_circumference`, `wrist_circumference`"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "03 — Single Anchor | foot length only | FULL_BODY | imputation",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has body_dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Anchors were imputed (anchors_calculated is true)\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.header.anchors_calculated).to.be.true;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"foot_length type is MEASURED\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    var dims = body.body_dimensions;",
+                                    "    if (dims.foot_length) {",
+                                    "        pm.expect(dims.foot_length.type).to.equal(\"MEASURED\");",
+                                    "    }",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"male\",\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"EUROPE\"\n    },\n    \"anchors\": {\n      \"foot_length\": 275\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"EUROPE\",\n      \"body_build_type\": \"ATHLETIC\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"FULL_BODY\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": false\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns 130 full-body dimensions reconstructed entirely via the dynamic imputation engine. `foot_length: 275 mm` is the only anchor — the Ridge Imputer derives `body_height` and `body_mass` from it before inference runs.\n\n`header.anchors_calculated` will be `true`, and `header.calculated_anchors` will show the imputed primary values. Confidence drops to SECONDARY tier (~74/67), reflected uniformly across all returned scores.\n\n**Anchor tier**: SECONDARY\n**Engine**: ADULT (EUROPE, ATHLETIC build)\n**Expected dimensions**: 130\n**confidence_score**: BONE ~74, FLESH ~67\n\n**Anchor bounds for foot_length**: 80–420 mm"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "04 — Targeted Dimensions | cherry-pick 4 dimensions",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Exactly 4 dimensions returned\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.equal(4);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"All requested dimensions are present\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    var dims = body.body_dimensions;",
+                                    "    pm.expect(dims).to.have.property(\"chest_circumference\");",
+                                    "    pm.expect(dims).to.have.property(\"waist_circumference_natural\");",
+                                    "    pm.expect(dims).to.have.property(\"hip_circumference\");",
+                                    "    pm.expect(dims).to.have.property(\"inseam_length\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"female\",\n      \"exact_age\": 30.0,\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"GLOBAL\"\n    },\n    \"anchors\": {\n      \"body_height\": 1680,\n      \"body_mass\": 65.0\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"GLOBAL\",\n      \"body_build_type\": \"CIVILIAN\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": null,\n      \"specific_dimensions\": [\n        \"chest_circumference\",\n        \"waist_circumference_natural\",\n        \"hip_circumference\",\n        \"inseam_length\"\n      ]\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": false\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns exactly the 4 dimensions listed in `specific_dimensions`, spanning two bundles (TORSO + LEGS_FEET). `bundle` is set to `null`.\n\nThe response contains only the requested keys — no other dimensions are computed or returned. Use this pattern to minimize response payload in production integrations.\n\n**Use case**: fashion e-commerce size recommendation — chest, natural waist, hip, inseam\n**Anchor tier**: PRIMARY_BOTH\n**Engine**: ADULT\n**Expected dimensions**: 4 exactly\n\n**Tip**: `specific_dimensions` can be combined with a `bundle` — the API returns the union."
+                    },
+                    "response": []
+                },
+                {
+                    "name": "05 — Bundle Filter | HAND_ARM | 32 dimensions",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has body_dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"hand_length type is MEASURED\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    var dims = body.body_dimensions;",
+                                    "    if (dims.hand_length) {",
+                                    "        pm.expect(dims.hand_length.type).to.equal(\"MEASURED\");",
+                                    "        pm.expect(dims.hand_length.confidence_score).to.equal(100);",
+                                    "    }",
+                                    "});",
+                                    "",
+                                    "pm.test(\"wrist_circumference type is MEASURED\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    var dims = body.body_dimensions;",
+                                    "    if (dims.wrist_circumference) {",
+                                    "        pm.expect(dims.wrist_circumference.type).to.equal(\"MEASURED\");",
+                                    "    }",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"male\",\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"MIDDLE_EAST\"\n    },\n    \"anchors\": {\n      \"hand_length\": 190,\n      \"wrist_circumference\": 165\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"MIDDLE_EAST\",\n      \"body_build_type\": \"CIVILIAN\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"HAND_ARM\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": true\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns the 32 HAND_ARM dimensions only. Anchors are within the HAND_ARM domain, maximising confidence scores for that group. Both anchors are returned as `type: MEASURED` with `confidence_score: 100`.\n\n**Use case**: wearables sizing (smartwatches, rings, gloves), VR controller ergonomics\n**Anchor tier**: SECONDARY (hand_length + wrist_circumference)\n**Engine**: ADULT (MIDDLE_EAST calibration)\n**Expected dimensions**: up to 32\n\n**Anchor bounds**:\n- `hand_length`: 60–330 mm\n- `wrist_circumference`: 80–400 mm (also unlocks PRIMARY_RICH)"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "06 — Regional Calibration | ASIA_PACIFIC | female | FULL_BODY",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has body_dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Adult engine was used\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.header.calculation_model_used).to.equal(\"ADULT\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"female\",\n      \"exact_age\": 28.0,\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"ASIA_PACIFIC\"\n    },\n    \"anchors\": {\n      \"body_height\": 1620,\n      \"body_mass\": 55.0\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"ASIA_PACIFIC\",\n      \"body_build_type\": \"CIVILIAN\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"FULL_BODY\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": true\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns 130 dimensions calibrated to East Asian body proportions. Both `input_origin_region` and `target_region` are set to `ASIA_PACIFIC`: the Universal Translator normalises input anchors to the ANSUR II global baseline (Step A), then shifts output proportions to the ASIA_PACIFIC population (Step B).\n\n**Cross-regional example**: Asian customer, European brand → set `input_origin_region: \"ASIA_PACIFIC\"`, `target_region: \"EUROPE\"`. The two fields are fully independent.\n\n**Use case**: global fashion platform serving regional size charts\n**Anchor tier**: PRIMARY_BOTH\n**Engine**: ADULT (ASIA_PACIFIC calibration)\n**Expected dimensions**: 130"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "07 — Body Build Type | OVERWEIGHT morphing | FULL_BODY",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has body_dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"female\",\n      \"exact_age\": 42.0,\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"GLOBAL\"\n    },\n    \"anchors\": {\n      \"body_height\": 1650,\n      \"body_mass\": 95.0\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"GLOBAL\",\n      \"body_build_type\": \"OVERWEIGHT\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"FULL_BODY\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": true\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns 130 dimensions with circumferences morphed for higher body fat distribution. `body_build_type: OVERWEIGHT` activates BMI-stratified NHANES morphing — the output differs from `CIVILIAN` primarily in circumference dimensions (waist, hip, chest, thighs).\n\nThe ANSUR II training baseline is military (lean). NHANES Deurenberg-based morphing adjusts the baseline toward civilian BMI and body fat distribution; OVERWEIGHT further shifts the circumference envelope.\n\n**Use case**: plus-size fashion, bariatric medical equipment sizing\n**Anchor tier**: PRIMARY_BOTH\n**Engine**: ADULT (OVERWEIGHT morphing)\n**Expected dimensions**: 130\n\n**Available body_build_type values**: `CIVILIAN` | `ATHLETIC` | `OVERWEIGHT`"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "08 — Pediatric Engine | age 7 female | HEAD_FACE | LMS + Ridge",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Pediatric engine was used\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.header.calculation_model_used).to.equal(\"PEDIATRIC\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"anchors_calculated is false for pediatric\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.header.anchors_calculated).to.be.false;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has HEAD_FACE dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"metric\",\n    \"subject\": {\n      \"gender\": \"female\",\n      \"exact_age\": 7.0,\n      \"age_category\": \"CHILD\",\n      \"input_origin_region\": \"GLOBAL\"\n    },\n    \"anchors\": {}\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"GLOBAL\",\n      \"body_build_type\": \"CIVILIAN\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"HEAD_FACE\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"metric\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": false\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Returns 20 HEAD_FACE dimensions for a 7-year-old female. No anchors required — the PEDIATRIC engine derives `body_height` and `body_mass` from CDC LMS growth charts for the given age and sex, then runs the full prediction pipeline.\n\n**Engine routing**: `exact_age: 7.0 ≤ 20` → PEDIATRIC engine (LMS Box-Cox, CDC/WHO)\n\n**Confidence score rules in pediatric mode**:\n- LMS-derived: `body_height`, `body_mass` → `confidence_score: 99` (exact tabular norm)\n- `head_circumference` (ages 0–36 months) → `confidence_score: 99`\n- All Ridge-scaled dimensions → capped at `confidence_score: 80`\n\n**`header.anchors_calculated`** is always `false` for pediatric — the LMS method is not the imputation pipeline.\n**`header.calculated_anchors`** is always `{}` for pediatric.\n\n**Pediatric age categories**: `INFANT` (0–2y) | `TODDLER` (2–4y) | `CHILD` (4–9y) | `PRE_TEEN` (9–12y) | `TEEN` (12–18y)\n\n**Use case**: childrenswear sizing, children's helmet/eyewear fitting, pediatric ergonomic design"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "09 — Imperial Input | height in inches + mass in lbs | output imperial",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has body_dimensions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body).to.have.property(\"body_dimensions\");",
+                                    "    pm.expect(Object.keys(body.body_dimensions).length).to.be.above(0);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Output unit is in (imperial output)\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    var dims = body.body_dimensions;",
+                                    "    var firstKey = Object.keys(dims)[0];",
+                                    "    if (firstKey && dims[firstKey].unit) {",
+                                    "        pm.expect(dims[firstKey].unit).to.be.oneOf([\"in\", \"lbs\", \"lb\"]);",
+                                    "    }",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            },
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"input_data\": {\n    \"input_unit_system\": \"imperial\",\n    \"subject\": {\n      \"gender\": \"male\",\n      \"exact_age\": 35.0,\n      \"age_category\": \"ADULT\",\n      \"input_origin_region\": \"GLOBAL\"\n    },\n    \"anchors\": {\n      \"body_height\": 70.1,\n      \"body_mass\": 180.8\n    }\n  },\n  \"output_settings\": {\n    \"calculation\": {\n      \"calculation_model\": \"AUTO\",\n      \"target_region\": \"GLOBAL\",\n      \"body_build_type\": \"CIVILIAN\"\n    },\n    \"requested_dimensions\": {\n      \"bundle\": \"TORSO\"\n    },\n    \"output_format\": {\n      \"unit_system\": \"imperial\",\n      \"confidence_score_threshold\": 0,\n      \"include_range_95\": true,\n      \"include_iso_codes\": false\n    }\n  }\n}",
+                            "options": {
+                                "raw": {
+                                    "language": "json"
+                                }
+                            }
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict"]
+                        },
+                        "description": "Demonstrates full imperial input/output pipeline. Anchors are supplied in inches and lbs; the API converts to metric internally (before validation) and returns results in inches/lbs.\n\n`body_height: 70.1 inches` → 1780.5 mm internally\n`body_mass: 180.8 lbs` → ~82.0 kg internally\n\nThis request is equivalent to scenario 01 (Strong Anchors) — same subject, same expected dimensions, different unit system. Useful for side-by-side comparison.\n\n**Imperial conversion rules (applied server-side before validation)**:\n- All `_height`, `_length`, `_breadth`, `circumference`, `_depth`, `_arc`, `_width`, `_reach`, `span` keys: multiply by 25.4 (inches → mm)\n- `body_mass`: divide by 2.20462 (lbs → kg)\n\n**Anchor validation** uses metric bounds. Supplying `body_height: 7` (inches) would be converted to 177.8 mm — valid. Supplying `body_height: 6` (inches) → 152.4 mm — valid (above 400 mm minimum? No — 152 mm is below the 400 mm minimum, so it would return 422).\n\n**Output**: `unit_system: \"imperial\"` returns all dimensions in inches; `body_mass` in lbs."
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "System",
+            "description": "Health probe, capability discovery, and pre-built request examples.\n\nThese endpoints require no request body and are safe to call at any time. `GET /v1/info` response is safe to cache — values do not change at runtime.",
+            "item": [
+                {
+                    "name": "Health Check | GET /health",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"API is healthy\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.status).to.equal(\"healthy\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Models are loaded\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.models_loaded).to.be.true;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Data files are OK\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.data_files_ok).to.be.true;",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Version is 1.4.0\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.version).to.equal(\"1.4.0\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/health",
+                            "host": ["{{base_url}}"],
+                            "path": ["health"]
+                        },
+                        "description": "Liveness/readiness probe. Run this first to confirm connectivity and that the API is fully operational.\n\nActively verifies all critical runtime dependencies:\n- Data directory exists\n- Models directory exists\n- NASA biological limits file exists\n\nReturns `503` if anything is missing — the orchestrator will pause traffic until the instance is ready.\n\n**Expected response**:\n```json\n{\n  \"status\": \"healthy\",\n  \"version\": \"1.4.0\",\n  \"models_loaded\": true,\n  \"data_files_ok\": true,\n  \"uptime_seconds\": 3721\n}\n```"
+                    },
+                    "response": [
+                        {
+                            "name": "Healthy",
+                            "originalRequest": {
+                                "method": "GET",
+                                "header": [
+                                    {
+                                        "key": "X-RapidAPI-Key",
+                                        "value": "{{rapidapi_key}}"
+                                    },
+                                    {
+                                        "key": "X-RapidAPI-Host",
+                                        "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                                    }
+                                ],
+                                "url": {
+                                    "raw": "{{base_url}}/health",
+                                    "host": ["{{base_url}}"],
+                                    "path": ["health"]
+                                }
+                            },
+                            "status": "OK",
+                            "code": 200,
+                            "_postman_previewlanguage": "json",
+                            "header": [
+                                {
+                                    "key": "Content-Type",
+                                    "value": "application/json"
+                                }
+                            ],
+                            "cookie": [],
+                            "body": "{\n  \"status\": \"healthy\",\n  \"version\": \"1.4.0\",\n  \"models_loaded\": true,\n  \"data_files_ok\": true,\n  \"uptime_seconds\": 3721\n}"
+                        }
+                    ]
+                },
+                {
+                    "name": "API Info | GET /v1/info",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has 7 supported regions\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.supported_regions).to.have.lengthOf(7);",
+                                    "    pm.expect(body.supported_regions).to.include(\"GLOBAL\");",
+                                    "    pm.expect(body.supported_regions).to.include(\"EUROPE\");",
+                                    "    pm.expect(body.supported_regions).to.include(\"ASIA_PACIFIC\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has 5 supported bundles\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.supported_bundles).to.have.lengthOf(5);",
+                                    "    pm.expect(body.supported_bundles).to.include(\"FULL_BODY\");",
+                                    "});",
+                                    "",
+                                    "pm.test(\"API version is 1.4.0\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.api_version).to.equal(\"1.4.0\");",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/v1/info",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "info"]
+                        },
+                        "description": "Returns static metadata about all API capabilities. Safe to cache — values do not change at runtime.\n\nReturns:\n- Supported regions (7): `AFRICA`, `ASIA_PACIFIC`, `EUROPE`, `GLOBAL`, `INDIA`, `LATAM`, `MIDDLE_EAST`\n- Supported bundles (5): `FULL_BODY`, `HAND_ARM`, `HEAD_FACE`, `LEGS_FEET`, `TORSO`\n- Supported age categories (6): `ADULT`, `CHILD`, `INFANT`, `PRE_TEEN`, `TEEN`, `TODDLER`\n- Pediatric age categories (5): `CHILD`, `INFANT`, `PRE_TEEN`, `TEEN`, `TODDLER`\n- Supported body build types (3): `ATHLETIC`, `CIVILIAN`, `OVERWEIGHT`\n- Supported calculation models (3): `ADULT`, `AUTO`, `PEDIATRIC`\n- Supported unit systems: `IMPERIAL`, `METRIC`\n- Adult limits standard: NASA-STD-3001\n- Pediatric limits: CDC P1–P99 age-banded bounds\n- Available endpoints\n\n**Use this endpoint to validate integration configuration before making prediction calls.**"
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Predict Examples | GET /v1/predict/examples",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test(\"Status code is 200\", function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Response has 8 examples\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    pm.expect(body.count).to.equal(8);",
+                                    "    pm.expect(body.examples).to.have.lengthOf(8);",
+                                    "});",
+                                    "",
+                                    "pm.test(\"Each example has a payload\", function () {",
+                                    "    var body = pm.response.json();",
+                                    "    body.examples.forEach(function(ex) {",
+                                    "        pm.expect(ex).to.have.property(\"payload\");",
+                                    "        pm.expect(ex).to.have.property(\"summary\");",
+                                    "        pm.expect(ex).to.have.property(\"id\");",
+                                    "    });",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "X-RapidAPI-Key",
+                                "value": "{{rapidapi_key}}"
+                            },
+                            {
+                                "key": "X-RapidAPI-Host",
+                                "value": "dimensionspot-bodysize-engine.p.rapidapi.com"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/v1/predict/examples",
+                            "host": ["{{base_url}}"],
+                            "path": ["v1", "predict", "examples"]
+                        },
+                        "description": "Returns 8 pre-built request payloads for `POST /v1/predict`. Each payload is immediately usable — copy the `payload` object and POST it to `/v1/predict`.\n\nThe 8 scenarios covered:\n1. Strong anchors — height + weight, 130 dimensions\n2. Rich anchors — height + weight + waist circumference, PRIMARY_RICH tier\n3. Single anchor — foot length only, imputation chain\n4. Targeted dimensions — 4 named dimensions, cross-bundle\n5. Bundle filter — HAND_ARM, 32 dimensions\n6. Regional calibration — Asia Pacific, female\n7. Body build type — OVERWEIGHT, BMI-adjusted\n8. Pediatric model — age 7, female, LMS + Ridge hybrid"
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}
